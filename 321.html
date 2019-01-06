@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>321</title>
+
+<link rel="shortcut icon" href="css/favicon.ico">    
+<link rel="stylesheet" type="text/css" href="css/bssite.css" media="screen" />
+ 
+<script type="text/javascript" src="static/jquery-3.3.1.min.js" ></script>
+<script type="text/javascript" src="static/jquery-ui.1.12.1.min.js" ></script>
+<script type="text/javascript" src="static/pixi-4.8.2.min.js"></script>
+<script type="text/javascript" src="static/buzz-1.2.1.js"></script>
+<script type="text/javascript" src="static/brython-3.7.0.js"></script>
+<script type="text/javascript" src="static/brython_stdlib-3.7.0.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+window.onload=function(){
+brython({debug:1, pythonpath:['static']});
+}
+</script>
+<script type="text/python">
+# 導入模組
+from ggame import App, ImageAsset, Sprite, MouseEvent, Frame, TextAsset
+from ggame import Color, Sound, LineStyle, RectangleAsset, CircleAsset, PolygonAsset, SoundAsset
+from random import random, randint
+import math
+from time import time
+
+up = 0
+down = 0
+right = 0
+left = 0
+pg = 0
+gg = 0
+
+def w(event):
+     global up
+     global down
+     global right
+     global life
+     global pg
+     pg = 3
+     up = 1
+     down = 0
+     right = 0
+     life = 0
+     
+def s(event):
+     global up
+     global down
+     global right
+     global life
+     global pg
+     pg = 1
+     up = 0
+     down = 1
+     right = 0
+     life = 0
+    
+def d(event):
+     global up
+     global down
+     global right
+     global life
+     global pg
+     pg = 0
+     up = 0
+     down = 0
+     right = 1
+     life = 0
+    
+def a(event):
+     global up
+     global down
+     global right
+     global life
+     global pg
+     pg = 2
+     up = 0
+     down = 0
+     right = 0
+     life = 1
+     
+     
+class GG(Sprite):
+    
+    asset = ImageAsset("images/8.png")
+    
+    def __init__(self, position):
+        super().__init__(GG.asset, position)
+        self.scale = 1
+        self.visible = False
+         
+    def step(self):
+        if gg:
+            self.visible = True
+
+
+class G(Sprite):
+    
+    asset = ImageAsset("images/5.png")
+    
+    def __init__(self, position):
+        super().__init__(G.asset, position)
+        self.scale = 0.5
+         
+    def step(self):
+        if random() < 0.1:
+            self.x += randint(-50,50)
+            self.y += randint(-50,50)
+
+
+class Bunny(Sprite):
+    
+    asset = ImageAsset("images/444.png",Frame(0,0,230,208), 4)
+    
+    def __init__(self, position):
+        super().__init__(Bunny.asset, position)
+        App.listenKeyEvent('keydown', 'w', w)
+        App.listenKeyEvent('keydown', 's', s)
+        App.listenKeyEvent('keydown', 'd', d)
+        App.listenKeyEvent('keydown', 'a', a)
+        self.scale = 0.4
+        
+    def step(self):
+        global up
+        global down
+        global right
+        global life
+        global pg
+        global gg
+        self.G = app.G
+        if up and self.y > 0:
+            self.setImage(pg)
+            self.y -= 10
+        if down and self.y < 770:
+            self.setImage(pg)
+            self.y += 10
+        if right and self.x < 1710:
+            self.setImage(pg)
+            self.x += 10
+        if life and self.x > 0:
+            self.setImage(pg)
+            self.x -= 10
+        if self.G.x + self.G.width >= self.x >=self.G.x and self.G.y + self.G.height >= self.y >= self.G.y:
+            self.visible = False
+            gg = 1
+
+
+class A(Sprite):
+
+    asset = ImageAsset("images/a.png")
+    
+    def __init__(self, position):
+        super().__init__(A.asset, position)
+        self.scale = 0.1
+        
+    def step(self):
+        self.Bunny = app.Bunny
+        if self.Bunny.x + self.Bunny.width >= self.x >=self.Bunny.x and self.Bunny.y + self.Bunny.height >= self.y >= self.Bunny.y:
+            self.visible = False
+
+class AA(Sprite):
+
+    asset = ImageAsset("images/a.png")
+    
+    def __init__(self, position):
+        super().__init__(AA.asset, position)
+        self.scale = 0.15
+        
+    def step(self):
+        self.Bunny = app.Bunny
+        if self.Bunny.x + self.Bunny.width >= self.x >=self.Bunny.x and self.Bunny.y + self.Bunny.height >= self.y >= self.Bunny.y:
+            self.visible = False
+            self.Bunny.scale =0.7
+            
+            
+class Bg(Sprite):
+
+    asset = ImageAsset("images/bg.png")
+    
+    def __init__(self, position):
+        super().__init__(Bg.asset, position)
+        
+    def step(self):
+            self.x = 0
+            self.y = 0
+
+
+class DemoApp(App):
+
+    def __init__(self):
+        super().__init__()
+        Bg((self.width/2, self.height/2))
+        for i in range(20):
+            A((randint(50,1680),randint(50,750)))
+        for c in range(1):
+            AA((randint(50,1680),randint(50,750)))
+        self.Bunny = Bunny((0,0))
+        self.G = G((840, 250))
+        self.GG = GG((740, 250))
+
+    def step(self):
+        for bunny in self.spritelist:
+            bunny.step()
+
+
+app = DemoApp()  
+app.run()
+
+</script>
+</body>
+</html>
+

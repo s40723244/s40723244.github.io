@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Game3</title>
+
+<link rel="shortcut icon" href="css/favicon.ico">    
+<link rel="stylesheet" type="text/css" href="css/bssite.css" media="screen" />
+ 
+<script type="text/javascript" src="static/jquery-3.3.1.min.js" ></script>
+<script type="text/javascript" src="static/jquery-ui.1.12.1.min.js" ></script>
+<script type="text/javascript" src="static/pixi-4.8.2.min.js"></script>
+<script type="text/javascript" src="static/buzz-1.2.1.js"></script>
+<script type="text/javascript" src="static/brython-3.7.0.js"></script>
+<script type="text/javascript" src="static/brython_stdlib-3.7.0.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+window.onload=function(){
+brython({debug:1, pythonpath:['static']});
+}
+</script>
+<script type="text/python">
+# 導入模組
+from ggame import App, ImageAsset, Sprite, MouseEvent
+from random import random, randint
+
+class Bunny(Sprite):
+    
+    asset = ImageAsset("images/bunny.png")
+    
+    def __init__(self, position):
+        super().__init__(Bunny.asset, position)
+        # register mouse events
+        self.dragging = False
+          
+    def step(self):
+        """
+        Every now and then a bunny hops...
+        """
+        if random() < 0.01:
+            self.x += randint(-20,20)
+            self.y += randint(-20,20)
+            
+  
+        
+class DemoApp(App):
+    
+    def __init__(self):
+        super().__init__()
+        for i in range(5):
+            Bunny((randint(50,self.width),randint(50,self.height)))
+        
+    def step(self):
+        """
+        Override step to perform action on each frame update
+        """
+        for bunny in self.spritelist:
+            bunny.step()
+
+
+# Create the app
+app = DemoApp()  
+# Run the app
+app.run()
+
+</script>
+</body>
+</html>
+

@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
 <head>
-<title>Brython Server</title>
+<meta charset="UTF-8">
+<title>8787</title>
 
 <link rel="shortcut icon" href="css/favicon.ico">    
 <link rel="stylesheet" type="text/css" href="css/bssite.css" media="screen" />
@@ -17,34 +18,76 @@
 <script type="text/javascript">
 window.onload=function(){
 brython({debug:1, pythonpath:['static']});
-//brython(1);
 }
 </script>
 <script type="text/python">
-from ggame import App, RectangleAsset, ImageAsset, SoundAsset
-from ggame import LineStyle, Color, Sprite, Sound
+# example 3
+from ggame import (
+    App, 
+    Color, 
+    Sound,
+    LineStyle, 
+    Sprite, 
+    RectangleAsset, 
+    ImageAsset,
+    CircleAsset, 
+    EllipseAsset, 
+    PolygonAsset,
+    SoundAsset,
+)
 
 myapp = App()
+
 # define colors and line style
 green = Color(0x00ff00, 1)
 black = Color(0, 1)
 noline = LineStyle(0, black)
 # a rectangle asset and sprite to use as background
-bg_asset = RectangleAsset(myapp.width, myapp.height, noline, green)
+bg_asset = RectangleAsset(myapp.width, myapp.height, noline, black)
 bg = Sprite(bg_asset, (0,0))
-
 # A ball! This is already in the ggame-tutorials repository
 ball_asset = ImageAsset("images/orb-150545_640.png")
 ball = Sprite(ball_asset, (0, 0))
 # Original image is too big. Scale it to 1/10 its original size
 ball.scale = 0.1
 # custom attributes
-ball.direction = 1
+ball.direction = 10
 ball.go = True
+# Sounds
+pew1_asset = SoundAsset("sounds/1.mp3")
+do = Sound(pew1_asset)
+
+pew2_asset = SoundAsset("sounds/2.mp3")
+re = Sound(pew2_asset)
+
+pew3_asset = SoundAsset("sounds/3.mp3")
+mi = Sound(pew3_asset)
+
+pew4_asset = SoundAsset("sounds/4.mp3")
+fa = Sound(pew4_asset)
+
+pew5_asset = SoundAsset("sounds/5.mp3")
+so = Sound(pew5_asset)
+
+pew6_asset = SoundAsset("sounds/6.mp3")
+la = Sound(pew6_asset)
+
+pew7_asset = SoundAsset("sounds/7.mp3")
+ti = Sound(pew7_asset)
+
+pew8_asset = SoundAsset("sounds/8.mp3")
+dou = Sound(pew8_asset)
 
 # reverse - change the ball direction
 def reverse(b):
+    #pop.play()
     b.direction *= -1
+
+def ball_y_down():
+    ball.y += 3
+    
+def ball_y_up():
+    ball.y -= 3
 
 # Set up function for handling screen refresh
 def step():
@@ -53,25 +96,43 @@ def step():
         if ball.x + ball.width > myapp.width or ball.x < 0:
             ball.x -= ball.direction
             reverse(ball)
+
 # Handle the space key
-def spaceKey(event):
-    ball.go = not ball.go
+def Do(event):
+    do.play()
 
-# Handle the "reverse" key
-def reverseKey(event):
-    reverse(ball)
+def Re(event):
+    re.play()
 
-# Handle the mouse click
-def mouseClick(event):
-    ball.x = event.x
-    ball.y = event.y
+def Mi(event):
+    mi.play()
     
-# Set up event handlers for the app
-myapp.listenKeyEvent('keydown', 'space', spaceKey)
-myapp.listenKeyEvent('keydown', 'r', reverseKey)
-myapp.listenMouseEvent('click', mouseClick)
+def Fa(event):
+    fa.play()
+    
+def So(event):
+    so.play() 
 
-myapp.run()
+def La(event):
+    la.play()
+    
+def Ti(event):
+    ti.play()
+    
+def Dou(event):
+    dou.play()
+# Set up event handlers for the app
+myapp.listenKeyEvent('keydown', 'a', Do)
+myapp.listenKeyEvent('keydown', 's', Re)
+myapp.listenKeyEvent('keydown', 'd', Mi)
+myapp.listenKeyEvent('keydown', 'f', Fa)
+myapp.listenKeyEvent('keydown', 'g', So)
+myapp.listenKeyEvent('keydown', 'h', La)
+myapp.listenKeyEvent('keydown', 'j', Ti)
+myapp.listenKeyEvent('keydown', 'k', Dou)
+    
+myapp.run(step)
 </script>
 </body>
 </html>
+

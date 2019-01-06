@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>321</title>
+
+<link rel="shortcut icon" href="css/favicon.ico">    
+<link rel="stylesheet" type="text/css" href="css/bssite.css" media="screen" />
+ 
+<script type="text/javascript" src="static/jquery-3.3.1.min.js" ></script>
+<script type="text/javascript" src="static/jquery-ui.1.12.1.min.js" ></script>
+<script type="text/javascript" src="static/pixi-4.8.2.min.js"></script>
+<script type="text/javascript" src="static/buzz-1.2.1.js"></script>
+<script type="text/javascript" src="static/brython-3.7.0.js"></script>
+<script type="text/javascript" src="static/brython_stdlib-3.7.0.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+window.onload=function(){
+brython({debug:1, pythonpath:['static']});
+}
+</script>
+<script type="text/python">
+# 導入模組
+from ggame import App, ImageAsset, Sprite, MouseEvent
+from ggame import Color, Sound, LineStyle, RectangleAsset, CircleAsset, PolygonAsset, SoundAsset
+from random import random, randint
+
+
+    
+up = 0
+down = 0
+right = 0
+life = 0
+go1 = 1
+back1 = 0
+go2 =1
+back2 =0
+def w(event):
+     global up
+     global down
+     global right
+     global life
+     up = 1
+     down = 0
+     right = 0
+     life = 0
+    
+def s(event):
+     global up
+     global down
+     global right
+     global life
+     up = 0
+     down = 1
+     right = 0
+     life = 0
+    
+def d(event):
+     global up
+     global down
+     global right
+     global life
+     up = 0
+     down = 0
+     right = 1
+     life = 0
+    
+def c(event):
+     global up
+     global down
+     global right
+     global life
+     up = 0
+     down = 0
+     right = 0
+     life = 1
+     
+class Bunny(Sprite):
+
+    asset = ImageAsset("images/1.png")
+ 
+    def __init__(self, position):
+        super().__init__(Bunny.asset, position)
+        # register mouse events
+        App.listenKeyEvent('keydown', 'w', w)
+        App.listenKeyEvent('keydown', 's', s)
+        App.listenKeyEvent('keydown', 'd', d)
+        App.listenKeyEvent('keydown', 'a', c)
+        self.scale = 0.4
+
+
+    
+    def step(self):
+        global up
+        global down
+        global right
+        global life
+        if up and self.y > 0:
+            self.y -= 50
+            up -= 1
+        if down and self.y < 770:
+            self.y += 50
+            down -= 1
+        if right and self.x < 1710:
+            self.x += 50
+            right -= 1
+        if life and self.x > 0:
+            self.x -= 50
+            life -= 1
+
+
+class Bg(Sprite):
+
+    asset = ImageAsset("images/bg.png")
+    
+    def __init__(self, position):
+        super().__init__(Bg.asset, position)
+        
+    def step(self):
+            self.x = 0
+            self.y = 0
+            
+class ball1(Sprite):
+
+    asset = ImageAsset("images/ball.png")
+    width = 80
+    height = 76
+    
+    def __init__(self, position):
+        super().__init__(ball1.asset, position)
+        self.scale = 0.1
+        
+    def step(self):
+        global go1
+        global back1
+        if go1:
+            self.x += 10
+            if self.x >2000:
+                go1 = 0
+                back1 = 1
+        if back1:
+            self.x -= 10
+            if self.x < -50:
+                go1 = 1
+                back1 = 0
+
+
+class ball2(Sprite):
+
+    asset = ImageAsset("images/ball.png")
+    width = 80
+    height = 76
+    
+    def __init__(self, position):
+        super().__init__(ball2.asset, position)
+        self.scale = 0.1
+        
+    def step(self):
+        global go2
+        global back2
+        if go2:
+            self.x += 50
+            if self.x >1700:
+                go2 = 0
+                back2 = 1
+        if back2:
+            self.x -= 50
+            if self.x < 10:
+                go2 = 1
+                back2 = 0
+
+class DemoApp(App):
+    
+    def __init__(self):
+        super().__init__()
+        Bg((self.width/2, self.height/2))
+        Bunny((800,700))
+        ball1((0,0))
+        ball2((0,100))
+
+
+    def step(self):
+        """
+        Override step to perform action on each frame update
+        """
+        for bunny in self.spritelist:
+            bunny.step()
+
+
+
+# Create the app
+app = DemoApp()  
+# Run the app
+app.run()
+
+</script>
+</body>
+</html>
+
